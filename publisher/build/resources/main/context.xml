@@ -1,0 +1,60 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+        >
+
+    <!-- AOP -->
+    <aop:config proxy-target-class="true"/>
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <context:annotation-config/>
+
+    <!-- load properties -->
+    <context:property-placeholder location="classpath:database.properties"/>
+    <util:properties id="hibernate" location="classpath:hibernate.properties"/>
+    <util:properties id="config" location="classpath:application.properties"/>
+
+    <!-- scan components -->
+    <context:component-scan base-package="ztbsuper.lousysterm.storage.apis"/>
+    <context:component-scan base-package="ztbsuper.lousysterm.storage.DAOs"/>
+    <context:component-scan base-package="ztbsuper.lousysterm.storage.services"/>
+
+    <!-- scan models -->
+    <util:list id="modelPackages">
+        <value>ztbsuper.lousysterm.storage.models</value>
+    </util:list>
+
+
+    <!-- data srouce -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl"
+                  value="jdbc:mysql://${db_host}:${db_port}/${db_schema}?useUnicode=yes&amp;characterEncoding=${characterEncoding}"/>
+        <property name="user" value="${db_user}"/>
+        <property name="password" value="${db_password}"/>
+        <property name="minPoolSize" value="${minPoolSize}"/>
+        <property name="maxPoolSize" value="${maxPoolSize}"/>
+        <property name="initialPoolSize" value="${initialPoolSize}"/>
+        <property name="maxIdleTime" value="${maxIdleTime}"/>
+        <property name="acquireIncrement" value="${acquireIncrement}"/>
+
+        <property name="preferredTestQuery" value="${preferredTestQuery}"/>
+        <property name="idleConnectionTestPeriod" value="${idleConnectionTestPeriod}"/>
+    </bean>
+
+    <!-- entity manager factory -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="#{modelPackages}"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties" ref="hibernate"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>

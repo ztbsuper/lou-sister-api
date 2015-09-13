@@ -1,0 +1,5 @@
+rootProject.name = 'lou-sister-api'
+include 'base'
+include 'publisher'
+include 'storage'
+

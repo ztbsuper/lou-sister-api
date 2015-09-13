@@ -1,0 +1,58 @@
+plugins {
+    id "org.flywaydb.flyway" version "3.2.1"
+    id "java"
+    id "war"
+    id "jetty"
+}
+
+version = '1.0'
+
+dependencies {
+    compile project(':base')
+    compile project(':storage')
+
+
+    testCompile(group: 'junit', name: 'junit', version: junitVersion)
+    testCompile(group: 'org.mockito', name: 'mockito-all', version: mockitoVersion) {
+        exclude module: 'junit'
+    }
+    testCompile(group: 'org.springframework', name: 'spring-test', version: springVersion) {
+        exclude module: 'junit'
+    }
+}
+
+war {
+    baseName = 'lousysterm-api'
+    manifest {
+        attributes "Implementation-Title": "Lousysterm API war"
+    }
+}
+
+
+ext {
+    environment = project.hasProperty("env") ? env : 'local'
+    environmentPah = "envs/" + environment
+    // read database envs
+    Properties props = new Properties()
+    props.load(new FileInputStream(file(environmentPah + "/database.properties")))
+    //  read database props
+    db_host = props.getProperty("db_host")
+    db_port = props.getProperty("db_port")
+    db_user = props.getProperty("db_user")
+    db_password = props.getProperty("db_password")
+    db_schema = props.getProperty("db_schema")
+    // set flyway params
+    flyway.url = "jdbc:mysql://" + db_host + ":" + db_port + "/" + db_schema + "?useUnicode=yes&characterEncoding=UTF-8"
+    flyway.user = db_user
+    flyway.password = db_password
+    flyway.encoding = 'UTF-8'
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/resources", environmentPah]
+        }
+    }
+}
+

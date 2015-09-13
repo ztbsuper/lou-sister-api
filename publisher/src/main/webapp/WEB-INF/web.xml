@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <display-name>Yobook API</display-name>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:context.xml</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>classpath:log4j.properties</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>Jersey REST Service</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>
+                com.wordnik.swagger.jaxrs.listing
+                ztbsuper.lousysterm.storage.apis
+                ztbsuper.lousysterm.publisher.filters
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.scanning.recursive</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Jersey REST Service</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SwaggerBootstrap</servlet-name>
+        <servlet-class>ztbsuper.lousysterm.publisher.servlets.SwaggerBootstrapServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+</web-app>

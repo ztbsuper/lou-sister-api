@@ -1,0 +1,50 @@
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'idea'
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
+        options.encoding = 'utf-8'
+        options.compilerArgs << "-Xlint:unchecked"
+    }
+}
+
+idea.project {
+    jdkName = '1.7'
+    languageLevel = '1.7'
+    vcs = 'Git'
+}
+
+ext {
+    junitVersion = '4.11'
+    mockitoVersion = '1.10.19'
+    jerseyVersion = '2.17'
+    log4jVersion = '1.2.17'
+    slf4jVersion = '1.7.5'
+    flywayVersion = '3.2.1'
+    jacksonVersion = '1.9.13'
+    javaRSApiVersion = '2.0'
+    springVersion = '3.2.13.RELEASE'
+    guavaVersion = '18.0'
+    hibernateVersion = '4.3.9.Final'
+    jedisVersion = '2.7.0'
+    poiVersion = '3.11'
+    mysqlConnectorVersion = '5.1.35'
+    jodaTimeVersion = '2.7'
+    aspectjVersion = '1.7.4'
+    jettyVersion = '8.1.14.v20131031'
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'http://repo.spring.io/milestone'
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}
