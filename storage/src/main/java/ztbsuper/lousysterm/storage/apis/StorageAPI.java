@@ -12,6 +12,7 @@ import ztbsuper.lousysterm.storage.services.StorageRecordService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 
 @Component
 @Path("storage_record")
@@ -38,5 +39,15 @@ public class StorageAPI {
     public Response queryAll() {
         return Response.ok().entity(storageRecordService.queryAll()).build();
     }
+
+    @GET
+    @ApiOperation(value = "下载excel记录")
+    @Path("export.excel")
+    @Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    public Response exportExcel() throws IOException {
+        byte[] data = storageRecordService.exportExcel();
+        return Response.ok(data).header("Content-Disposition", "attachment; filename=export.xls").build();
+    }
+
 
 }
