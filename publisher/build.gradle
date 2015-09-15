@@ -23,9 +23,10 @@ dependencies {
 
 war {
     baseName = 'lousysterm-api'
+    from "$buildDir/classes/main"
     manifest {
         attributes "Implementation-Title": "Lousysterm API war"
-        attributes 'Main-Class': 'ztbsuper.lousysterm.publisher.Launcher'
+        attributes "Main-Class": "ztbsuper.lousysterm.publisher.Launcher"
     }
 }
 
