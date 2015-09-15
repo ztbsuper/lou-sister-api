@@ -28,10 +28,10 @@ public class StorageRecordService {
     StorageRecordMapper storageRecordMapper;
 
     @Transactional
-    public void save(CreateStorageRecordRequest request) {
+    public Long save(CreateStorageRecordRequest request) {
         StorageRecordModel storageRecordModel = storageRecordMapper.map(request, StorageRecordModel.class);
         storageDAO.save(storageRecordModel);
-
+        return storageRecordModel.getId();
     }
 
     public List<StorageRecordResponse> queryAll() {

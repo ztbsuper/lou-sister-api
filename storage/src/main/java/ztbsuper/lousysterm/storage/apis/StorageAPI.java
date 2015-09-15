@@ -7,6 +7,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ztbsuper.lousysterm.storage.apis.requests.CreateStorageRecordRequest;
+import ztbsuper.lousysterm.storage.apis.responses.CreateStorageRecordResponse;
 import ztbsuper.lousysterm.storage.apis.responses.StorageRecordResponse;
 import ztbsuper.lousysterm.storage.services.StorageRecordService;
 
@@ -26,15 +27,20 @@ public class StorageAPI {
 
     @POST
     @ApiOperation(value = "创建一条称重记录",
-            response = StorageRecordResponse.class,
-            responseContainer = "List")
+            response = CreateStorageRecordResponse.class
+    )
     public Response createRecord(@ApiParam(value = "创建一条记录", required = true) CreateStorageRecordRequest request) {
-        storageRecordService.save(request);
-        return Response.status(201).build();
+        Long id = storageRecordService.save(request);
+        CreateStorageRecordResponse response = new CreateStorageRecordResponse();
+        response.setItemID(id);
+        response.setMsg("创建成功");
+        return Response.status(201).entity(response).build();
     }
 
     @GET
-    @ApiOperation(value = "获取所有的记录")
+    @ApiOperation(value = "获取所有的记录",
+            response = StorageRecordResponse.class,
+            responseContainer = "List")
     @Path("list")
     public Response queryAll() {
         return Response.ok().entity(storageRecordService.queryAll()).build();

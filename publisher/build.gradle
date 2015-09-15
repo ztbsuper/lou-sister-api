@@ -25,6 +25,7 @@ war {
     baseName = 'lousysterm-api'
     manifest {
         attributes "Implementation-Title": "Lousysterm API war"
+        attributes 'Main-Class': 'ztbsuper.lousysterm.publisher.Launcher'
     }
 }
 
