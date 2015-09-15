@@ -47,7 +47,7 @@ public class StorageRecordService {
         Workbook wb = new HSSFWorkbook();
         Sheet sheet = wb.createSheet("记录表");
 
-        List<String> headers = Lists.newArrayList("编号", "编号", "重量(KG)", "日期");
+        List<String> headers = Lists.newArrayList("序号", "编号", "重量(KG)", "日期");
 
         writeExcelHeader(headers, sheet);
 
